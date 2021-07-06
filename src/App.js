@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+const url = "https://api.github.com/users";
+const App = () => {
+  const [users, setUsers] = useState([]);
 
-function App() {
+  const getUsers = async () => {
+    const response = await fetch(url);
+    const users = await response.json();
+    setUsers(users);
+  };
+  useEffect(() => {
+    getUsers();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Git hub</h1>
+      {users.map((user) => {
+        const { id, login, avatar_url, html_url } = user;
+        return (
+          <ul>
+            <li key={id}>
+              <img src={avatar_url} alt={login} />
+              <h4> {login}</h4>
+              <a href={html_url}></a>
+            </li>
+          </ul>
+        );
+      })}
     </div>
   );
-}
-
+};
 export default App;
